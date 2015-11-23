@@ -3,4 +3,5 @@ recursive-include aldryn_twitter/templates *
 recursive-include aldryn_twitter/static *
 recursive-include aldryn_twitter/locale *
 recursive-include aldryn_twitter/migrations *
+recursive-include aldryn_twitter/south_migrations *
 recursive-exclude * *.pyc
