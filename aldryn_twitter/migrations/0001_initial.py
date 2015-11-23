@@ -1,59 +1,41 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import migrations, models
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'TwitterPlugin'
-        db.create_table('cmsplugin_twitterplugin', (
-            ('cmsplugin_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['cms.CMSPlugin'], unique=True, primary_key=True)),
-            ('username', self.gf('django.db.models.fields.CharField')(max_length=50, blank=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=75, blank=True)),
-            ('query', self.gf('django.db.models.fields.CharField')(default='', max_length=200, blank=True)),
-            ('count', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=3)),
-        ))
-        db.send_create_signal('aldryn_twitter', ['TwitterPlugin'])
+    dependencies = [
+        ('cms', '0012_auto_20150607_2207'),
+    ]
 
-
-    def backwards(self, orm):
-        # Deleting model 'TwitterPlugin'
-        db.delete_table('cmsplugin_twitterplugin')
-
-
-    models = {
-        'aldryn_twitter.twitterplugin': {
-            'Meta': {'object_name': 'TwitterPlugin', 'db_table': "'cmsplugin_twitterplugin'", '_ormbases': ['cms.CMSPlugin']},
-            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cms.CMSPlugin']", 'unique': 'True', 'primary_key': 'True'}),
-            'count': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '3'}),
-            'query': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '200', 'blank': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '75', 'blank': 'True'}),
-            'username': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'})
-        },
-        'cms.cmsplugin': {
-            'Meta': {'object_name': 'CMSPlugin'},
-            'changed_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'creation_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'language': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
-            'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cms.CMSPlugin']", 'null': 'True', 'blank': 'True'}),
-            'placeholder': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cms.Placeholder']", 'null': 'True'}),
-            'plugin_type': ('django.db.models.fields.CharField', [], {'max_length': '50', 'db_index': 'True'}),
-            'position': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
-        },
-        'cms.placeholder': {
-            'Meta': {'object_name': 'Placeholder'},
-            'default_width': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'slot': ('django.db.models.fields.CharField', [], {'max_length': '50', 'db_index': 'True'})
-        }
-    }
-
-    complete_apps = ['aldryn_twitter']
+    operations = [
+        migrations.CreateModel(
+            name='TwitterPlugin',
+            fields=[
+                ('cmsplugin_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='cms.CMSPlugin')),
+                ('widget_id', models.CharField(max_length=75, verbose_name='Widget ID')),
+                ('href', models.CharField(help_text='Fallback link location. The link is isplayed when Twitter is not able to display the widget. (e.g. "https://twitter.com/_username_")', max_length=75, verbose_name='Link Location', blank=True)),
+                ('link_title', models.CharField(help_text='Fallback link title. The link is displayed when Twitter is not able to display the widget. (e.g. "See my tweets!")', max_length=75, verbose_name='Link Title', blank=True)),
+                ('theme', models.CharField(default=b'light', max_length=5, verbose_name='Theme', choices=[(b'light', b'Light'), (b'dark', b'Dark')])),
+                ('link_color', models.CharField(help_text='The color to display the links in.', max_length=6, verbose_name='Link Color', blank=True)),
+                ('border_color', models.CharField(help_text='The color to display the borders in.', max_length=6, verbose_name='Border Color', blank=True)),
+                ('width', models.PositiveIntegerField(help_text='In pixels.', null=True, verbose_name='Widgth', blank=True)),
+                ('height', models.PositiveIntegerField(help_text='In pixels.', null=True, verbose_name='Height', blank=True)),
+                ('header', models.BooleanField(default=True, verbose_name='Header')),
+                ('footer', models.BooleanField(default=True, verbose_name='Footer')),
+                ('borders', models.BooleanField(default=True, verbose_name='Borders')),
+                ('scrollbar', models.BooleanField(default=True, verbose_name='Scrollbar')),
+                ('transparent', models.BooleanField(default=False, verbose_name='Transparent Background')),
+                ('language_code', models.CharField(help_text='Language in which display the time-line.', max_length=10, blank=True)),
+                ('tweet_limit', models.PositiveIntegerField(help_text='How many tweets to display in the time-line.', null=True, blank=True)),
+                ('related_users', models.TextField(help_text='Comma-separated list of users you want to suggest the user to follow after he has taken an action in the timeline (e.g. "user_1,user_2").', blank=True)),
+                ('aria_politeness', models.CharField(default=b'polite', help_text='ARIA is an accessibility system that aids people using assistive technology interacting with dynamic web content.', max_length=9, choices=[(b'polite', b'Polite'), (b'assertive', b'Assertive')])),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=('cms.cmsplugin',),
+        ),
+    ]
